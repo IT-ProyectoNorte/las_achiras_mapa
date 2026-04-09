@@ -40,7 +40,7 @@ export default function BottomMenu() {
 
           {/* Logo */}
           <div className="flex items-center justify-center">
-            <Logo width="w-14 sm:w-16 md:w-20" />
+            <Logo width="w-14 sm:w-16 md:w-24" />
           </div>
        </div>
 
