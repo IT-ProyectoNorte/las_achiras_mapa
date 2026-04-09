@@ -7,7 +7,7 @@ export default function BottomMenu() {
   const { zoomIn, zoomOut } = useControls();
 
   return (
-    <div className="bg-white rounded-t-[20px] shadow-[0_-10px_40px_rgba(0,0,0,0.15)] px-3 py-4 sm:py-4 md:px-6 md:py-5 flex flex-row items-center justify-between gap-2 sm:gap-4 md:gap-6 pointer-events-auto">
+    <div className="bg-white rounded-t-[20px] shadow-[0_-10px_40px_rgba(0,0,0,0.15)] px-3 py-4 sm:px-5 sm:py-5 md:px-6 md:py-5 flex flex-row items-center justify-between gap-2 sm:gap-4 md:gap-6 pointer-events-auto">
        
        {/* References - vertical on mobile/tablet, horizontal on desktop */}
        <div className="flex flex-col sm:flex-col md:flex-row items-start md:items-center gap-1.5 sm:gap-2 md:gap-4">
