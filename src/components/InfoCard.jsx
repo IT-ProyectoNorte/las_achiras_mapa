@@ -77,7 +77,7 @@ export default function InfoCard({ isDesktop = false }) {
 
         {/* Logo — Hug content */}
         <div className="flex items-center px-4 shrink-0 bg-white border-l border-gray-100">
-            <Logo width="w-16" />
+            <Logo width="w-18" />
         </div>
 
         {/* Close Button — Hug content */}
