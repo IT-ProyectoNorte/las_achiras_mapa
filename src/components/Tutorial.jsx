@@ -42,7 +42,7 @@ export default function Tutorial() {
           className="flex items-center gap-2 sm:gap-3 bg-azul4 hover:bg-azul3 text-white font-bold text-xs sm:text-sm md:text-lg py-3 sm:py-4 md:py-5 px-6 sm:px-8 md:px-10 rounded-full shadow-xl transition-all hover:scale-105 tracking-widest cursor-pointer"
         >
           <Map size={20} className="md:w-7 md:h-7" />
-          CONTINUAR AL MAPA
+          VER EL MAPA
         </button>
       </div>
 

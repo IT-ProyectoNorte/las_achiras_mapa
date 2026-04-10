@@ -80,26 +80,25 @@ export default function MapScreen({ deviceView = 'desktop' }) {
             )}
           </div>
 
-          {/* Floating UI over the map */}
-          {selectedLotId && (
-            <>
-              {/* Desktop Bar (covers bottom menu completely) */}
-              <div className="absolute z-50 pointer-events-none hidden lg:block bottom-0 left-0 w-full">
-                <InfoCard isDesktop={deviceView === 'desktop'} />
-              </div>
-              
-              {/* Mobile/Tablet Card (sits right above bottom menu) */}
-              <div className="absolute z-50 pointer-events-none block lg:hidden bottom-[70px] left-0">
-                <InfoCard isDesktop={false} />
-              </div>
-            </>
+          {/* Floating UI over the map - Desktop */}
+          {selectedLotId && deviceView === 'desktop' && (
+            <div className="absolute z-50 pointer-events-none hidden lg:block bottom-0 left-0 w-full">
+              <InfoCard isDesktop={true} />
+            </div>
           )}
 
-          {/* Fixed Bottom Menu (hidden on Desktop if InfoCard is active) */}
-          <div className={`absolute bottom-0 left-0 right-0 z-50 pointer-events-auto ${selectedLotId ? 'lg:hidden' : ''}`}>
-            <BottomMenu />
-          </div>
+          {/* Floating UI over the map - Mobile/Tablet */}
+          {selectedLotId && deviceView !== 'desktop' && (
+            <div className="absolute z-50 pointer-events-none block lg:hidden bottom-[70px] left-0">
+              <InfoCard isDesktop={false} />
+            </div>
+          )}
         </TransformWrapper>
+
+        {/* Bottom Menu - Outside TransformWrapper to ensure visibility */}
+        <div className={`absolute bottom-0 left-0 right-0 z-50 pointer-events-auto ${selectedLotId && deviceView === 'desktop' ? 'lg:hidden' : ''}`}>
+          <BottomMenu />
+        </div>
       </div>
     </div>
   );
