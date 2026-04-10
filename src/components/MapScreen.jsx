@@ -5,12 +5,18 @@ import MapCanvas from './MapCanvas';
 import InfoCard from './InfoCard';
 import BottomMenu from './BottomMenu';
 
+const zoomControlsRef = { current: { zoomIn: null, zoomOut: null } };
+
 function MapContent({ deviceView, selectedLotId, loading, error }) {
   const { zoomIn, zoomOut } = useControls();
   
+  useEffect(() => {
+    zoomControlsRef.current = { zoomIn, zoomOut };
+  }, [zoomIn, zoomOut]);
+  
   return (
-    <>
-      <div className="w-full h-[100dvh-70px] sm:h-[100dvh-80px] lg:h-[100dvh-96px] overflow-hidden">
+    <div className="w-full h-full relative">
+      <div className="w-full h-full">
         <MapCanvas />
         
         {/* Loading overlay */}
@@ -44,10 +50,7 @@ function MapContent({ deviceView, selectedLotId, loading, error }) {
           <InfoCard isDesktop={false} />
         </div>
       )}
-      
-      {/* Bottom Menu - dentro del área de zoom para que funcione useControls */}
-      <BottomMenu onZoomIn={zoomIn} onZoomOut={zoomOut} />
-    </>
+    </div>
   );
 }
 
@@ -95,7 +98,7 @@ export default function MapScreen({ deviceView = 'desktop' }) {
 
   return (
     <div className="w-full h-[100dvh] bg-[#D8E2E1] overflow-hidden flex flex-col">
-      {/* Contenedor del mapa - usa dvh para adaptarse a la pantalla */}
+      {/* Contenedor del mapa - scroll nativo */}
       <div className="flex-1 min-h-0 overflow-hidden">
         <TransformWrapper
           ref={transformRef}
@@ -114,6 +117,14 @@ export default function MapScreen({ deviceView = 'desktop' }) {
             />
           </TransformComponent>
         </TransformWrapper>
+      </div>
+
+      {/* Bottom Menu - fijo debajo, fuera del área de zoom */}
+      <div className="shrink-0">
+        <BottomMenu 
+          onZoomIn={() => zoomControlsRef.current.zoomIn?.()} 
+          onZoomOut={() => zoomControlsRef.current.zoomOut?.()} 
+        />
       </div>
     </div>
   );
