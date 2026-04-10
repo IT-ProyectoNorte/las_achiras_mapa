@@ -48,8 +48,8 @@ export default function MapScreen({ deviceView = 'desktop' }) {
   }, []);
 
   return (
-    <div className="w-full h-screen bg-[#D8E2E1] flex flex-col">
-      <div className="flex-1 relative overflow-hidden">
+    <div className="w-full h-screen bg-[#D8E2E1] flex justify-center overflow-hidden">
+      <div className="relative w-full h-full flex flex-col transition-all duration-700 ease-in-out">
         <TransformWrapper
           ref={transformRef}
           initialScale={1}
@@ -58,44 +58,48 @@ export default function MapScreen({ deviceView = 'desktop' }) {
           centerOnInit={true}
           limitToBounds={false}
         >
-          <MapCanvas />
-          
-          {/* Loading overlay */}
-          {loading && (
-            <div className="absolute inset-0 bg-[#D8E2E1]/80 flex items-center justify-center z-40">
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-10 h-10 border-4 border-azul4 border-t-transparent rounded-full animate-spin" />
-                <span className="text-azul4 font-nexa font-bold text-sm tracking-wider">CARGANDO LOTES...</span>
+          {/* Canvas map */}
+          <div className="flex-1 w-full overflow-hidden relative">
+            <MapCanvas />
+            
+            {/* Loading overlay */}
+            {loading && (
+              <div className="absolute inset-0 bg-[#D8E2E1]/80 flex items-center justify-center z-40">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-10 h-10 border-4 border-azul4 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-azul4 font-nexa font-bold text-sm tracking-wider">CARGANDO LOTES...</span>
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Error message */}
+            {error && !loading && (
+              <div className="absolute top-4 left-4 right-4 bg-red-50 border border-red-200 rounded-lg px-4 py-3 z-40">
+                <p className="text-red-700 text-sm font-nexa text-center">{error}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Floating UI over the map */}
+          {selectedLotId && (
+            <>
+              {/* Desktop Bar (covers bottom menu completely) */}
+              <div className="absolute z-50 pointer-events-none hidden lg:block bottom-0 left-0 w-full">
+                <InfoCard isDesktop={deviceView === 'desktop'} />
+              </div>
+              
+              {/* Mobile/Tablet Card (sits right above bottom menu) */}
+              <div className="absolute z-50 pointer-events-none block lg:hidden bottom-[70px] left-0">
+                <InfoCard isDesktop={false} />
+              </div>
+            </>
           )}
 
-          {/* Error message */}
-          {error && !loading && (
-            <div className="absolute top-4 left-4 right-4 bg-red-50 border border-red-200 rounded-lg px-4 py-3 z-40">
-              <p className="text-red-700 text-sm font-nexa text-center">{error}</p>
-            </div>
-          )}
+          {/* Fixed Bottom Menu (hidden on Desktop if InfoCard is active) */}
+          <div className={`absolute bottom-0 left-0 right-0 z-50 pointer-events-auto ${selectedLotId ? 'lg:hidden' : ''}`}>
+            <BottomMenu />
+          </div>
         </TransformWrapper>
-
-        {/* InfoCard - Desktop */}
-        {selectedLotId && deviceView === 'desktop' && (
-          <div className="absolute z-50 pointer-events-none bottom-0 left-0 w-full">
-            <InfoCard isDesktop={true} />
-          </div>
-        )}
-
-        {/* InfoCard - Mobile/Tablet */}
-        {selectedLotId && deviceView !== 'desktop' && (
-          <div className="absolute z-50 pointer-events-none bottom-[70px] left-0">
-            <InfoCard isDesktop={false} />
-          </div>
-        )}
-      </div>
-
-      {/* Bottom Menu */}
-      <div className={`relative z-50 ${selectedLotId ? 'hidden lg:block' : ''}`}>
-        <BottomMenu />
       </div>
     </div>
   );
