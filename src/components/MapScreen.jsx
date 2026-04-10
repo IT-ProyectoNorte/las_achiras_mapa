@@ -48,8 +48,8 @@ export default function MapScreen({ deviceView = 'desktop' }) {
   }, []);
 
   return (
-    <div className="w-full h-screen bg-[#D8E2E1] overflow-hidden flex flex-col">
-      {/* Contenedor del mapa - altura fija basada en altura del menú */}
+    <div className="w-full h-[100dvh] bg-[#D8E2E1] overflow-hidden flex flex-col">
+      {/* Contenedor del mapa - usa dvh para adaptarse a la pantalla */}
       <div className="flex-1 min-h-0 overflow-hidden">
         <TransformWrapper
           ref={transformRef}
@@ -59,7 +59,7 @@ export default function MapScreen({ deviceView = 'desktop' }) {
           centerOnInit={true}
           limitToBounds={false}
         >
-          <div className="w-full h-full overflow-hidden">
+          <div className="w-full h-[100dvh-70px] sm:h-[100dvh-80px] lg:h-[100dvh-96px] overflow-hidden">
             <MapCanvas />
             
             {/* Loading overlay */}
