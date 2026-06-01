@@ -72,22 +72,18 @@ export default function MapCanvas() {
         const isInner = index === 1;
         const isNumber = index > 1;
 
-        // Colores por estado
+        // Colores: disponible = arena, cualquier otro estado = gris
         if (isOuter) {
-          if (st === 'disponible')       path.style.fill = '#C0B391';
-          else if (st === 'reservada')   path.style.fill = '#B8860B';
-          else if (st === 'vendida')     path.style.fill = '#8B1A1A';
-          else                           path.style.fill = '#8f8f8f'; // bloqueada u otro
+          if (st === 'disponible') path.style.fill = '#C0B391';
+          else                     path.style.fill = '#8f8f8f';
         } 
         else if (isInner) {
-          if (st === 'disponible')       path.style.fill = '#E2D6BE';
-          else if (st === 'reservada')   path.style.fill = '#DAA520';
-          else if (st === 'vendida')     path.style.fill = '#CD5C5C';
-          else                           path.style.fill = '#636363';
+          if (st === 'disponible') path.style.fill = '#E2D6BE';
+          else                     path.style.fill = '#636363';
         } 
         else if (isNumber) {
-          if (st === 'disponible')       path.style.fill = '#3F3F40';
-          else                           path.style.fill = '#FFFFFF';
+          if (st === 'disponible') path.style.fill = '#3F3F40';
+          else                     path.style.fill = '#FFFFFF';
         }
 
         // Cursor y pointer-events según estado

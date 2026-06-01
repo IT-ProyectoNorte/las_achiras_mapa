@@ -10,17 +10,7 @@ const ESTADO_CONFIG = {
     dot: '#E2D6BE',
     dotBorder: '#C0B391',
   },
-  reservada: {
-    label: 'RESERVADA',
-    dot: '#DAA520',
-    dotBorder: '#B8860B',
-  },
-  vendida: {
-    label: 'VENDIDA',
-    dot: '#CD5C5C',
-    dotBorder: '#8B1A1A',
-  },
-  bloqueada: {
+  default: {
     label: 'NO DISPONIBLE',
     dot: '#636363',
     dotBorder: '#8f8f8f',
@@ -30,7 +20,7 @@ const ESTADO_CONFIG = {
 function getEstadoConfig(estado) {
   if (!estado) return ESTADO_CONFIG['disponible'];
   const key = estado.toLowerCase().trim();
-  return ESTADO_CONFIG[key] || ESTADO_CONFIG['bloqueada'];
+  return key === 'disponible' ? ESTADO_CONFIG['disponible'] : ESTADO_CONFIG['default'];
 }
 
 export default function InfoCard({ isDesktop = false }) {
@@ -102,21 +92,12 @@ export default function InfoCard({ isDesktop = false }) {
           </div>
         </div>
 
-        {/* Referencias — todos los estados */}
+        {/* Referencias — 2 estados */}
         <div className="flex items-center px-4 shrink-0 bg-white border-l border-gray-100">
           <div className="flex flex-col gap-1.5 justify-center">
-            <EstadoBadge />
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#E2D6BE', border: '1.5px solid #C0B391' }} />
               <span className="font-nexa font-bold text-[10px] text-[#49494a] tracking-[0.2px] whitespace-nowrap uppercase">DISPONIBLE</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#DAA520', border: '1.5px solid #B8860B' }} />
-              <span className="font-nexa font-bold text-[10px] text-[#49494a] tracking-[0.2px] whitespace-nowrap uppercase">RESERVADA</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#CD5C5C', border: '1.5px solid #8B1A1A' }} />
-              <span className="font-nexa font-bold text-[10px] text-[#49494a] tracking-[0.2px] whitespace-nowrap uppercase">VENDIDA</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#636363', border: '1.5px solid #8f8f8f' }} />
