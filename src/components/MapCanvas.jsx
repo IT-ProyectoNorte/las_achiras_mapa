@@ -98,7 +98,7 @@ export default function MapCanvas() {
           path.setAttribute('tabindex', '0');
         }
 
-        // Selection border: solo para disponibles seleccionados
+        // Selection border: para todos los lotes no bloqueados seleccionados
         if (isOuter && selectedLotId === lotId && !blocked) {
           const d = path.getAttribute('d');
           if (!d) return;

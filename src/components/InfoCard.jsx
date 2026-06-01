@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
-import { X, Square, Compass, CircleDollarSign } from 'lucide-react';
+import { X, Square, Compass, CircleDollarSign, Ban } from 'lucide-react';
 import Logo from './Logo';
 
 // Configuración de colores y etiquetas por estado
@@ -46,6 +46,7 @@ export default function InfoCard({ isDesktop = false }) {
 
   const estadoRaw = lot.Estado || 'disponible';
   const estadoConfig = getEstadoConfig(estadoRaw);
+  const isDisponible = estadoRaw.toLowerCase().trim() === 'disponible';
   const orientacionValue = lot.Orientacion || '---';
   const mText = `M ${lot.Manzana || fallbackManzana}`;
   const lText = `LOTE ${lot.Lote || fallbackLote}`;
@@ -88,7 +89,11 @@ export default function InfoCard({ isDesktop = false }) {
           </div>
           <div className="flex items-center gap-3 text-[#49494a]">
             <CircleDollarSign size={24} className="text-azul2 shrink-0" />
-            <span className="font-nexa text-[18px] font-bold whitespace-nowrap">{lot.Precio} USD</span>
+            {isDisponible ? (
+              <span className="font-nexa text-[18px] font-bold whitespace-nowrap">{lot.Precio} USD</span>
+            ) : (
+              <span className="font-nexa text-[18px] font-bold whitespace-nowrap text-[#636363]">NO DISPONIBLE</span>
+            )}
           </div>
         </div>
 
@@ -156,7 +161,11 @@ export default function InfoCard({ isDesktop = false }) {
         </div>
         <div className="flex items-center gap-4 text-[#49494a]">
           <CircleDollarSign size={24} className="text-azul2" />
-          <span className="font-nexa text-[16px] font-bold leading-none whitespace-nowrap">{lot.Precio} USD</span>
+          {isDisponible ? (
+            <span className="font-nexa text-[16px] font-bold leading-none whitespace-nowrap">{lot.Precio} USD</span>
+          ) : (
+            <span className="font-nexa text-[16px] font-bold leading-none whitespace-nowrap text-[#636363]">NO DISPONIBLE</span>
+          )}
         </div>
         {/* Estado badge en mobile */}
         <div className="mt-2">
