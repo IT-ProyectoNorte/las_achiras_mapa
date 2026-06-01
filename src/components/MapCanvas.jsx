@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useStore } from '../store/useStore';
 
-// Estados que NO son clickeables
-const BLOCKED_STATES = ['vendida', 'reservada', 'bloqueada'];
+// Estados que NO son clickeables (ninguno bloqueado, todos son clickeables)
+const BLOCKED_STATES = [];
 
 function isBlocked(estado) {
   if (!estado) return false;
@@ -86,17 +86,10 @@ export default function MapCanvas() {
           else                     path.style.fill = '#FFFFFF';
         }
 
-        // Cursor y pointer-events según estado
-        if (blocked) {
-          path.style.cursor = 'not-allowed';
-          path.style.pointerEvents = 'auto';
-          path.removeAttribute('role');
-          path.removeAttribute('tabindex');
-        } else {
-          path.style.cursor = 'pointer';
-          path.setAttribute('role', 'button');
-          path.setAttribute('tabindex', '0');
-        }
+        // Cursor y pointer-events: todos clickeables
+        path.style.cursor = 'pointer';
+        path.setAttribute('role', 'button');
+        path.setAttribute('tabindex', '0');
 
         // Selection border: para todos los lotes no bloqueados seleccionados
         if (isOuter && selectedLotId === lotId && !blocked) {
