@@ -38,7 +38,7 @@ function MapContent({ loading, error }) {
   );
 }
 
-const BLOCKED_STATES = ['vendida', 'reservada', 'bloqueada'];
+
 
 export default function MapScreen({ deviceView = 'desktop' }) {
   const selectedLotId = useStore(state => state.selectedLotId);
@@ -47,10 +47,10 @@ export default function MapScreen({ deviceView = 'desktop' }) {
   const loading = useStore(state => state.loading);
   const error = useStore(state => state.error);
 
-  // Solo mostrar InfoCard si el lote es disponible
-  const selectedLot = lotsData.find(l => l.ID === selectedLotId || l.id === selectedLotId);
-  const selectedEstado = selectedLot?.Estado?.toLowerCase().trim() || selectedLot?.estado?.toLowerCase().trim() || 'disponible';
-  const showInfoCard = selectedLotId && !BLOCKED_STATES.includes(selectedEstado);
+  
+  
+  
+  const showInfoCard = !!selectedLotId;
   const transformRef = useRef(null);
   const resizeTimeoutRef = useRef(null);
 
