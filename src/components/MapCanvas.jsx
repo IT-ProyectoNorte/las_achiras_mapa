@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useStore } from '../store/useStore';
 
+// Estados que NO son clickeables
+const BLOCKED_STATES = ['vendida', 'reservada', 'bloqueada'];
+
+function isBlocked(estado) {
+  if (!estado) return false;
+  return BLOCKED_STATES.includes(estado.toLowerCase().trim());
+}
+
 export default function MapCanvas() {
   const lotsData = useStore(state => state.lotsData);
   const selectedLotId = useStore(state => state.selectedLotId);
@@ -56,32 +64,46 @@ export default function MapCanvas() {
       if (!paths.length) return;
 
       const dbLot = lotsData.find(l => (l.ID === lotId || l.id === lotId));
-      const st = dbLot?.Estado?.toLowerCase() || dbLot?.estado?.toLowerCase() || 'disponible';
+      const st = dbLot?.Estado?.toLowerCase().trim() || dbLot?.estado?.toLowerCase().trim() || 'disponible';
+      const blocked = isBlocked(st);
 
       paths.forEach((path, index) => {
-        path.style.cursor = "pointer";
-        path.setAttribute('role', 'button');
-        path.setAttribute('tabindex', '0');
-
         const isOuter = index === 0;
         const isInner = index === 1;
         const isNumber = index > 1;
 
+        // Colores por estado
         if (isOuter) {
-          if (st === 'disponible') path.style.fill = '#C0B391';
-          else path.style.fill = '#8f8f8f';
+          if (st === 'disponible')       path.style.fill = '#C0B391';
+          else if (st === 'reservada')   path.style.fill = '#B8860B';
+          else if (st === 'vendida')     path.style.fill = '#8B1A1A';
+          else                           path.style.fill = '#8f8f8f'; // bloqueada u otro
         } 
         else if (isInner) {
-          if (st === 'disponible') path.style.fill = '#E2D6BE';
-          else path.style.fill = '#636363';
+          if (st === 'disponible')       path.style.fill = '#E2D6BE';
+          else if (st === 'reservada')   path.style.fill = '#DAA520';
+          else if (st === 'vendida')     path.style.fill = '#CD5C5C';
+          else                           path.style.fill = '#636363';
         } 
         else if (isNumber) {
-          if (st === 'disponible') path.style.fill = '#3F3F40';
-          else path.style.fill = '#FFFFFF';
+          if (st === 'disponible')       path.style.fill = '#3F3F40';
+          else                           path.style.fill = '#FFFFFF';
         }
 
-        // Selection border: inside stroke via clipPath
-        if (isOuter && selectedLotId === lotId) {
+        // Cursor y pointer-events según estado
+        if (blocked) {
+          path.style.cursor = 'not-allowed';
+          path.style.pointerEvents = 'auto';
+          path.removeAttribute('role');
+          path.removeAttribute('tabindex');
+        } else {
+          path.style.cursor = 'pointer';
+          path.setAttribute('role', 'button');
+          path.setAttribute('tabindex', '0');
+        }
+
+        // Selection border: solo para disponibles seleccionados
+        if (isOuter && selectedLotId === lotId && !blocked) {
           const d = path.getAttribute('d');
           if (!d) return;
 
@@ -123,7 +145,13 @@ export default function MapCanvas() {
     if (lotGroup && /^lotes\/M\d+_L\d+\//i.test(lotGroup.id)) {
       const match = lotGroup.id.match(/M\d+_L\d+/i);
       if (match) {
-        setSelectedLotId(match[0]);
+        const lotId = match[0];
+        // Verificar si el lote está bloqueado antes de seleccionar
+        const dbLot = lotsData.find(l => (l.ID === lotId || l.id === lotId));
+        const st = dbLot?.Estado?.toLowerCase().trim() || dbLot?.estado?.toLowerCase().trim() || 'disponible';
+        if (!isBlocked(st)) {
+          setSelectedLotId(lotId);
+        }
         return;
       }
     }

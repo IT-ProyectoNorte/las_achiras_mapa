@@ -38,11 +38,19 @@ function MapContent({ loading, error }) {
   );
 }
 
+const BLOCKED_STATES = ['vendida', 'reservada', 'bloqueada'];
+
 export default function MapScreen({ deviceView = 'desktop' }) {
   const selectedLotId = useStore(state => state.selectedLotId);
+  const lotsData = useStore(state => state.lotsData);
   const fetchLotsData = useStore(state => state.fetchLotsData);
   const loading = useStore(state => state.loading);
   const error = useStore(state => state.error);
+
+  // Solo mostrar InfoCard si el lote es disponible
+  const selectedLot = lotsData.find(l => l.ID === selectedLotId || l.id === selectedLotId);
+  const selectedEstado = selectedLot?.Estado?.toLowerCase().trim() || selectedLot?.estado?.toLowerCase().trim() || 'disponible';
+  const showInfoCard = selectedLotId && !BLOCKED_STATES.includes(selectedEstado);
   const transformRef = useRef(null);
   const resizeTimeoutRef = useRef(null);
 
@@ -102,7 +110,7 @@ export default function MapScreen({ deviceView = 'desktop' }) {
       </div>
 
       {/* InfoCard Desktop - tapa el menú */}
-      {selectedLotId && deviceView === 'desktop' && (
+      {showInfoCard && deviceView === 'desktop' && (
         <div className="absolute inset-0 pointer-events-none flex items-end">
           <div className="pointer-events-auto w-full z-[200]">
             <InfoCard isDesktop={true} />
@@ -111,7 +119,7 @@ export default function MapScreen({ deviceView = 'desktop' }) {
       )}
 
       {/* InfoCard Mobile/Tablet - fijo debajo del mapa pero arriba del menú */}
-      {selectedLotId && deviceView !== 'desktop' && (
+      {showInfoCard && deviceView !== 'desktop' && (
         <div className="absolute z-50 bottom-[70px] left-0 pointer-events-none">
           <div className="pointer-events-auto">
             <InfoCard isDesktop={false} />
